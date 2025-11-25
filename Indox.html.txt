@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Sưu Tập Ảnh Cổ Điển</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cấu hình Tailwind với bảng màu be-nâu-đen -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#4a2c2a', // Nâu Cà Phê Đậm
+                        'secondary-gold': '#a37c35', // Vàng Đồng làm màu nhấn
+                        'background-light': '#f8f5ee', // Be/Kem nhạt
+                        'text-dark': '#1e1e1e', // Đen ấm
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f5ee; /* Nền Be/Kem nhạt */
+        }
+        /* Hiệu ứng mượt mà khi hover */
+        .photo-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Đảm bảo ảnh ban đầu được hiển thị */
+            display: block; 
+        }
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -5px rgba(74, 44, 42, 0.2);
+        }
+        /* Style cho nút lọc đang hoạt động */
+        .filter-button.active {
+            background-color: #4a2c2a; /* Màu nâu đậm */
+            color: #f8f5ee; /* Màu chữ be nhạt */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-background-light shadow-md sticky top-0 z-10 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-serif font-bold text-primary-dark tracking-wider">The Archive.</h1>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#home" class="text-text-dark hover:text-secondary-gold transition duration-150">Trang Chủ</a>
+                <a href="#collection" class="text-text-dark hover:text-secondary-gold transition duration-150">Bộ Sưu Tập</a>
+                <a href="#about" class="text-text-dark hover:text-secondary-gold transition duration-150">Giới Thiệu</a>
+            </nav>
+            <button id="menu-button" class="md:hidden text-text-dark hover:text-secondary-gold focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu (Ẩn ban đầu) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-background-light border-t border-gray-200">
+            <a href="#home" class="block px-4 py-2 text-text-dark hover:bg-gray-100">Trang Chủ</a>
+            <a href="#collection" class="block px-4 py-2 text-text-dark hover:bg-gray-100">Bộ Sưu Tập</a>
+            <a href="#about" class="block px-4 py-2 text-text-dark hover:bg-gray-100">Giới Thiệu</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Hero Section -->
+        <section id="home" class="text-center mb-16 bg-white p-10 rounded-xl shadow-lg border-t-8 border-primary-dark">
+            <h2 class="text-4xl sm:text-5xl font-serif font-bold text-text-dark mb-4">Khoảnh Khắc Cổ Điển</h2>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Một tuyển tập tối giản, tập trung vào kết cấu, ánh sáng và tông màu be-nâu ấm áp.
+            </p>
+            <a href="#collection" class="inline-block bg-primary-dark text-background-light font-semibold py-3 px-8 rounded-full shadow-xl hover:bg-secondary-gold hover:text-text-dark transition duration-300 transform hover:scale-105">
+                Khám Phá Ảnh
+            </a>
+        </section>
+
+        <!-- Filter Controls -->
+        <section class="mb-8">
+            <h3 class="text-2xl font-bold text-text-dark mb-4">Lọc Theo Chủ Đề</h3>
+            <div id="filter-controls" class="flex flex-wrap gap-3">
+                <button data-filter="all" class="filter-button active bg-primary-dark text-background-light px-4 py-2 rounded-full font-medium transition duration-200 shadow-md hover:bg-secondary-gold hover:text-text-dark">
+                    Tất Cả
+                </button>
+                <button data-filter="nature" class="filter-button bg-white text-text-dark px-4 py-2 rounded-full font-medium transition duration-200 shadow-md border border-gray-300 hover:bg-gray-100">
+                    Thiên Nhiên
+                </button>
+                <button data-filter="portrait" class="filter-button bg-white text-text-dark px-4 py-2 rounded-full font-medium transition duration-200 shadow-md border border-gray-300 hover:bg-gray-100">
+                    Chân Dung
+                </button>
+                <button data-filter="city" class="filter-button bg-white text-text-dark px-4 py-2 rounded-full font-medium transition duration-200 shadow-md border border-gray-300 hover:bg-gray-100">
+                    Thành Phố
+                </button>
+                <button data-filter="stilllife" class="filter-button bg-white text-text-dark px-4 py-2 rounded-full font-medium transition duration-200 shadow-md border border-gray-300 hover:bg-gray-100">
+                    Tĩnh Vật
+                </button>
+            </div>
+        </section>
+
+        <!-- Photo Collection Grid -->
+        <section id="collection" class="mb-16">
+            <h2 class="text-3xl font-serif font-bold text-text-dark mb-8 border-b-2 border-secondary-gold pb-2">Bộ Sưu Tập</h2>
+            
+            <!-- Grid Layout - Responsive: 2 cột trên mobile, 3 cột trên medium, 4 cột trên large -->
+            <div id="photo-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                
+                <!-- Photo Card 1: Nature (Sử dụng Unsplash cho hình ảnh thực tế, tông màu be/nâu) -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="nature" data-caption="Đồi Cát Hoang Mạc" data-src="https://source.unsplash.com/800x600/?desert,sand,minimalist">
+                    <img src="https://source.unsplash.com/400x300/?desert,sand,minimalist" alt="Đồi Cát Hoang Mạc" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Sa Mạc</h3>
+                        <p class="text-sm text-gray-500">Thiên Nhiên</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 2: Portrait -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="portrait" data-caption="Chân Dung Đơn Sắc" data-src="https://source.unsplash.com/600x800/?portrait,monochrome,minimalist">
+                    <img src="https://source.unsplash.com/300x400/?portrait,monochrome,minimalist" onerror="this.src='https://placehold.co/300x400/1e1e1e/f8f5ee?text=Chân+Dung+Đen';" alt="Chân Dung Đơn Sắc" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Chân Dung</h3>
+                        <p class="text-sm text-gray-500">Tối giản</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 3: City/Architecture -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="city" data-caption="Kiến Trúc Tối Giản" data-src="https://source.unsplash.com/800x600/?architecture,brown,beige,city">
+                    <img src="https://source.unsplash.com/400x300/?architecture,brown,beige,city" alt="Kiến Trúc Tối Giản" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Thành Phố</h3>
+                        <p class="text-sm text-gray-500">Kiến trúc</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 4: Still Life -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="stilllife" data-caption="Bình Gốm Tĩnh Vật" data-src="https://source.unsplash.com/600x600/?pottery,minimalist,stilllife,beige">
+                    <img src="https://source.unsplash.com/300x300/?pottery,minimalist,stilllife,beige" onerror="this.src='https://placehold.co/300x300/a37c35/1e1e1e?text=Tĩnh+Vật+Gốm';" alt="Bình Gốm Tĩnh Vật" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Tĩnh Vật</h3>
+                        <p class="text-sm text-gray-500">Gốm</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 5: Nature -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="nature" data-caption="Núi non mờ ảo" data-src="https://source.unsplash.com/800x600/?mountain,fog,monochrome">
+                    <img src="https://source.unsplash.com/400x300/?mountain,fog,monochrome" alt="Núi non mờ ảo" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Núi</h3>
+                        <p class="text-sm text-gray-500">Thiên Nhiên</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 6: Portrait -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="portrait" data-caption="Ánh sáng và Bóng tối" data-src="https://source.unsplash.com/600x800/?shadow,face,minimal">
+                    <img src="https://source.unsplash.com/300x400/?shadow,face,minimal" onerror="this.src='https://placehold.co/300x400/4a2c2a/f8f5ee?text=Bóng+Tối+Ảnh';" alt="Ánh sáng và Bóng tối" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Khoảnh Khắc</h3>
+                        <p class="text-sm text-gray-500">Chân dung</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 7: City -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="city" data-caption="Đường phố Lịch sử" data-src="https://source.unsplash.com/800x600/?oldtown,europe,brown">
+                    <img src="https://source.unsplash.com/400x300/?oldtown,europe,brown" alt="Đường phố Lịch sử" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Lịch Sử</h3>
+                        <p class="text-sm text-gray-500">Thành phố</p>
+                    </div>
+                </div>
+
+                <!-- Photo Card 8: Still Life -->
+                <div class="photo-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer" data-category="stilllife" data-caption="Cà Phê Buổi Sáng" data-src="https://source.unsplash.com/600x600/?coffee,minimalist,table">
+                    <img src="https://source.unsplash.com/300x300/?coffee,minimalist,table" onerror="this.src='https://placehold.co/300x300/1e1e1e/f8f5ee?text=Cà+Phê';" alt="Cà Phê Buổi Sáng" class="w-full h-48 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-semibold text-lg text-primary-dark">Tĩnh Vật</h3>
+                        <p class="text-sm text-gray-500">Đồ uống</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="bg-primary-dark text-background-light p-10 rounded-xl shadow-xl">
+            <h2 class="text-3xl font-serif font-bold mb-4 border-b pb-2 border-secondary-gold">Triết Lý Hình Ảnh</h2>
+            <p class="text-lg">
+                Bộ sưu tập này là minh chứng cho việc tìm kiếm vẻ đẹp trong sự tối giản. Từ kết cấu cát mịn đến độ tương phản của ánh sáng, mỗi bức ảnh đều được lựa chọn kỹ lưỡng để phù hợp với tông màu Be-Nâu-Đen ấm áp và thanh lịch.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-4 text-sm font-medium">
+                <span class="inline-block bg-secondary-gold text-text-dark rounded-full px-3 py-1">#Vintage</span>
+                <span class="inline-block bg-secondary-gold text-text-dark rounded-full px-3 py-1">#Minimalist</span>
+                <span class="inline-block bg-secondary-gold text-text-dark rounded-full px-3 py-1">#BrownTone</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-text-dark text-background-light p-6 mt-12">
+        <div class="max-w-7xl mx-auto text-center text-sm">
+            <p>&copy; 2025 Bộ Sưu Tập Ảnh Cổ Điển. Mọi quyền được bảo lưu.</p>
+            <p class="mt-1">Thiết kế theo tông Be - Nâu - Đen</p>
+        </div>
+    </footer>
+
+    <!-- Modal Xem Ảnh Lớn (Photo Viewer Modal) -->
+    <div id="image-modal" class="fixed inset-0 bg-text-dark bg-opacity-90 flex items-center justify-center z-50 hidden p-4" onclick="closeModal()">
+        <div class="relative max-w-4xl w-full max-h-full" onclick="event.stopPropagation()">
+            <!-- Nút Đóng -->
+            <button class="absolute top-4 right-4 text-background-light text-3xl font-bold z-50 p-2 rounded-full bg-primary-dark bg-opacity-70 hover:bg-opacity-100 transition" onclick="closeModal()">
+                &times;
+            </button>
+            
+            <!-- Hình ảnh và chú thích -->
+            <div class="bg-white rounded-lg overflow-hidden shadow-2xl">
+                <img id="modal-image" src="" alt="Ảnh Chi Tiết" class="w-full max-h-[80vh] object-contain">
+                <div class="p-4 bg-primary-dark text-background-light text-center">
+                    <p id="modal-caption" class="text-lg font-serif"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript cho tương tác và lọc ảnh -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuButton = document.getElementById('menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const photoCards = document.querySelectorAll('.photo-card');
+            const filterButtons = document.querySelectorAll('.filter-button');
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalCaption = document.getElementById('modal-caption');
+
+            // --- 1. Chức năng Menu Mobile ---
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // --- 2. Chức năng Modal Xem Ảnh ---
+            photoCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Check if the card is hidden before opening the modal
+                    if (card.style.display === 'none') return;
+                    
+                    const imgSrc = card.getAttribute('data-src');
+                    const captionText = card.getAttribute('data-caption');
+                    
+                    modalImage.src = imgSrc;
+                    modalCaption.textContent = captionText;
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            // Hàm đóng Modal
+            window.closeModal = () => {
+                modal.classList.add('hidden');
+            };
+
+            // Đóng modal bằng phím ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+
+            // --- 3. Chức năng Lọc Ảnh ---
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filterValue = button.getAttribute('data-filter');
+
+                    // Cập nhật trạng thái nút (Active class)
+                    filterButtons.forEach(btn => btn.classList.remove('active', 'bg-primary-dark', 'text-background-light', 'hover:bg-secondary-gold', 'hover:text-text-dark', 'bg-white', 'text-text-dark', 'border', 'border-gray-300'));
+
+                    // Đặt lại màu sắc mặc định cho tất cả các nút
+                    filterButtons.forEach(btn => {
+                        btn.classList.add('bg-white', 'text-text-dark', 'border', 'border-gray-300', 'hover:bg-gray-100');
+                    });
+
+                    // Đặt màu sắc cho nút đang hoạt động
+                    button.classList.add('active', 'bg-primary-dark', 'text-background-light', 'hover:bg-primary-dark');
+                    button.classList.remove('bg-white', 'text-text-dark', 'border', 'border-gray-300', 'hover:bg-gray-100');
+
+
+                    // Lọc và hiển thị ảnh
+                    photoCards.forEach(card => {
+                        const cardCategory = card.getAttribute('data-category');
+                        
+                        if (filterValue === 'all' || cardCategory === filterValue) {
+                            // Hiển thị (sử dụng Tailwind flex/grid)
+                            card.style.display = 'block';
+                        } else {
+                            // Ẩn
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
